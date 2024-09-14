@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add New Todo Item</title>
+    <!-- Bootstrap CSS -->
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.2/css/bootstrap.min.css}" />
+    <!-- Optional Bootstrap Icons -->
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.10.0/font/bootstrap-icons.css}" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e9ecef 0%, #ffffff 100%);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-top: 2rem;
+        }
+        h2 {
+            color: #212529;
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-control {
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-size: 1rem;
+            border: 1px solid #ced4da;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .form-control:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+        }
+        .btn-outline-success {
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.125rem;
+            border-color: #28a745;
+            color: #28a745;
+            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+        }
+        .btn-outline-success:hover {
+            background-color: #28a745;
+            color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .btn-outline-success:focus {
+            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+        }
+        .text-danger {
+            color: #dc3545;
+            font-size: 0.875rem;
+        }
+        .back-btn {
+            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-12 mb-4">
+            <a class="btn btn-outline-success back-btn" href="/">
+                <i class="bi bi-arrow-left-square-fill"></i> Back
+            </a>
+        </div>
+        <div class="col-md-8 mx-auto">
+            <h2>Add a New Todo Item</h2>
+            <form action="#" th:action="@{/todo}" th:object="${todoModel}" method="POST">
+                <div class="form-group">
+                    <label for="description" class="form-label">Description</label>
+                    <input class="form-control"
+                           type="text"
+                           th:field="*{description}"
+                           id="description"
+                           placeholder="Enter description"
+                           required
+                    />
+                    <div th:if="${#fields.hasErrors('description')}" class="text-danger mt-2">
+                        <p th:errors="*{description}"></p>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-outline-success">
+                    <i class="bi bi-plus-square-fill"></i> Add Todo
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+<script th:src="@{/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

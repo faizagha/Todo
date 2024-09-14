@@ -1,0 +1,195 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Todo List Application</title>
+    <!-- Bootstrap CSS -->
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.2/css/bootstrap.min.css}" />
+    <!-- Optional Bootstrap Icons -->
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.10.0/font/bootstrap-icons.css}" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e2e2e2 0%, #ffffff 100%);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+        .header-section {
+            background: #007bff;
+            color: #ffffff;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .header-section h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        .header-section p {
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+        }
+        .table {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .table thead th {
+            background-color: #343a40;
+            color: #ffffff;
+            font-weight: 700;
+            border-bottom: 2px solid #495057;
+        }
+        .table tbody tr {
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .table tbody tr:hover {
+            background-color: #e9ecef;
+            transform: scale(1.02);
+        }
+        .table td, .table th {
+            padding: 1rem;
+            vertical-align: middle;
+            border-top: 1px solid #dee2e6;
+        }
+        .btn {
+            border-radius: 1.25rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn-info {
+            background: linear-gradient(45deg, #17a2b8, #1394a7);
+            border: none;
+            color: #ffffff;
+        }
+        .btn-info:hover {
+            background: linear-gradient(45deg, #138496, #117a8b);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+        .btn-info:active {
+            background: linear-gradient(45deg, #117a8b, #0e5f6f);
+            transform: translateY(0);
+        }
+        .btn-danger {
+            background: linear-gradient(45deg, #dc3545, #c82333);
+            border: none;
+            color: #ffffff;
+        }
+        .btn-danger:hover {
+            background: linear-gradient(45deg, #c82333, #bd2130);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+        .btn-danger:active {
+            background: linear-gradient(45deg, #bd2130, #a71d2a);
+            transform: translateY(0);
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            border: none;
+            color: #ffffff;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #0056b3, #004085);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+        .btn-primary:active {
+            background: linear-gradient(45deg, #004085, #003366);
+            transform: translateY(0);
+        }
+        .badge-success {
+            background-color: #28a745;
+        }
+        .badge-warning {
+            background-color: #ffc107;
+        }
+        .create-btn {
+            margin-top: 1.5rem;
+        }
+        footer {
+            background: #343a40;
+            color: #ffffff;
+            padding: 1rem;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Header Section -->
+    <div class="header-section">
+        <h1>Spring Boot Todo Application</h1>
+        <p>Manage your tasks efficiently with this simple todo list application.</p>
+    </div>
+
+    <hr />
+
+    <!-- Todo List Table -->
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Actions</th>
+            <th>Id</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Updated At</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Iterate over the todoItems -->
+        <tr th:each="item : ${todoItems}" th:classappend="${item.isComplete} ? 'table-success' : 'table-warning'">
+            <td>
+                <div class="btn-group" role="group">
+                    <!-- Edit Button -->
+                    <a class="btn btn-info" th:href="@{/edit/{id}(id=${item.id})}">
+                        <i class="bi bi-pencil-fill"></i> Edit
+                    </a>
+                    <!-- Delete Button -->
+                    <a class="btn btn-danger" th:href="@{/delete/{id}(id=${item.id})}">
+                        <i class="bi bi-trash-fill"></i> Delete
+                    </a>
+                </div>
+            </td>
+            <td th:text="${item.id}"></td>
+            <td th:text="${item.description}"></td>
+            <td>
+                <!-- Display completion status -->
+                <span th:if="${item.isComplete}" class="badge badge-success">Completed</span>
+                <span th:unless="${item.isComplete}" class="badge badge-warning">Pending</span>
+            </td>
+            <td th:text="${#dates.format(item.createdAt, 'MMM d, yyyy h:mm a')}"></td>
+            <td th:text="${#dates.format(item.updatedAt, 'MMM d, yyyy h:mm a')}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Create Todo Button -->
+    <p class="create-btn">
+        <a class="btn btn-primary" href="/create-todo">
+            <i class="bi bi-plus-square-fill"></i> Create a Todo
+        </a>
+    </p>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script th:src="@{/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
